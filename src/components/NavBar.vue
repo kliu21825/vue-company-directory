@@ -1,12 +1,13 @@
 <script setup>
   import { ref } from 'vue'
-  const brand = ref('🏛️ Fake Company Directory ')
+  const brand = ref('🏢 Fake Company Directory ')
 </script>
 <template>
   <nav>
     <div class="wraper">
-      <div class="brand">
+      <RouterLink :to="{ name: 'Home' }" class="brand">
         <span class="brand-title">{{ brand }}</span>
+        </RouterLink>
       </div>
       <div class="menu">
         <a href="#" class="menu-item">Departments</a>
