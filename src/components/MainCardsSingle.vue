@@ -1,10 +1,34 @@
 <script setup>
+  import { ref } from 'vue'
   import { faker } from '@faker-js/faker'
-  const fullName = faker.name.fullName()
+
+  import useAPI from '@/composables/useAPI'
+  const { getDepartment } = useAPI()
 
   const selectCard = () => {
-    console.log(`${fullName} selected`)
+    console.log(`${props.employee.name} selected`)
   }
+
+  const props = defineProps({
+    employee: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          createdAt: '2022-01-01',
+          departmentId: '123',
+          email: 'john.doe@example.com',
+          employeeId: '123',
+          name: 'John Doe',
+          quote: 'Really Cool quote',
+          title: 'Position',
+          updatedAt: '2022-01-01',
+        }
+      },
+    },
+  })
+  const departmentResponse = await getDepartment(props.employee.departmentId)
+  const department = ref(departmentResponse)
 </script>
 
 <template>
@@ -13,13 +37,9 @@
       <img :src="faker.internet.avatar()" alt="" srcset="" />
     </div>
     <div class="card-details">
-      <p class="card-details-name">{{ fullName }}</p>
-      <p class="card-details-job">{{ faker.name.jobTitle() }}</p>
-      <!-- Clicking on the email tab will open a new email window 😄 -->
-      <a class="card-details-email" :href="'mailto:' + faker.internet.exampleEmail(fullName)">{{
-        faker.internet.exampleEmail(fullName)
-      }}</a>
-      <p class="card-details-quote">"{{ faker.lorem.paragraph() }}"</p>
+      <p class="card-details-name">{{ props.employee.name }}</p>
+      <p class="card-details-job">{{ props.employee.title }}, {{ department.name }}</p>
+      <p class="card-details-quote">"{{ props.employee.quote }}"</p>
     </div>
   </div>
 </template>
